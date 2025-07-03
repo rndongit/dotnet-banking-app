@@ -6,7 +6,7 @@ on:
 jobs:
   build-and-deploy:
     name: Build, Test, and Deploy (.NET)
-    runs-on: [self-hosted, runner_for_.net_ci_cd]  # ✅ FIXED
+    runs-on: [self-hosted, runner_for_.net_ci_cd]
 
     steps:
       - name: ⏬ Checkout Code
@@ -15,7 +15,7 @@ jobs:
       - name: 🛠️ Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.0.x'  # adjust if needed
+          dotnet-version: '8.0.x'
 
       - name: 📦 Restore Dependencies
         run: dotnet restore dotnet-banking-app.sln
@@ -32,8 +32,11 @@ jobs:
             --configuration Release \
             --output ./publish_output
 
-      - name: 📤 Deploy to IIS (Optional)
+      - name: 📤 Deploy to IIS
+        if: runner.os == 'Windows'
         run: |
-          echo "Replace this with your actual deployment logic"
-          # Example:
-          # Copy-Item -Path ./publish_output/* -Destination "C:\inetpub\wwwroot\BankingApp" -Recurse -Force
+          echo "Deploying to IIS..."
+          Copy-Item -Path ./publish_output/* -Destination "C:\inetpub\wwwroot\BankingApp" -Recurse -Force
+
+      - name: ✅ Done
+        run: echo "CI/CD workflow completed successfully."
