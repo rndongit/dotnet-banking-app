@@ -1,0 +1,40 @@
+name: Manual CI/CD for .NET App
+
+on:
+  workflow_dispatch:  # Manual trigger from GitHub UI
+
+jobs:
+  build-and-deploy:
+    name: Build, Test, and Deploy (.NET)
+    runs-on: self-hosted
+    labels: [runner_for_.net_ci_cd]
+
+    steps:
+      - name: ⏬ Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🛠️ Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x' # Update based on your .NET version
+
+      - name: 📦 Restore Dependencies
+        run: dotnet restore dotnet-banking-app.sln
+
+      - name: 🧪 Run Unit Tests
+        run: dotnet test dotnet-banking-app.sln --no-restore --verbosity normal
+
+      - name: 🏗️ Build Application
+        run: dotnet build dotnet-banking-app.sln --no-restore --configuration Release
+
+      - name: 🚀 Publish Application
+        run: |
+          dotnet publish BankingApp/BankingApp.csproj \
+            --configuration Release \
+            --output ./publish_output
+
+      - name: 📤 Deploy to IIS (Optional)
+        run: |
+          echo "Run your deployment script or copy files"
+          # Example for IIS deployment (Windows runner):
+          # Copy-Item -Path ./publish_output/* -Destination "C:\inetpub\wwwroot\BankingApp" -Recurse -Force
