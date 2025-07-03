@@ -20,17 +20,17 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: 📦 Restore Dependencies
-        run: dotnet restore dotnet-banking-app.sln
+        run: dotnet restore ApnaBank/ApnaBank.sln
 
       - name: 🧪 Run Unit Tests
-        run: dotnet test dotnet-banking-app.sln --no-restore --verbosity normal
+        run: dotnet test ApnaBank/ApnaBank.sln --no-restore --verbosity normal
 
       - name: 🏗️ Build Application
-        run: dotnet build dotnet-banking-app.sln --no-restore --configuration Release
+        run: dotnet build ApnaBank/ApnaBank.sln --no-restore --configuration Release
 
       - name: 🚀 Publish Application
         run: |
-          dotnet publish BankingApp/BankingApp.csproj \
+          dotnet publish ApnaBank/ApnaBank.csproj \
             --configuration Release \
             --output ./publish_output
 
