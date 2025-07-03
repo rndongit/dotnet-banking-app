@@ -16,7 +16,7 @@ jobs:
 
       - name: 🏗️ Build Application using MSBuild
         run: |
-          msbuild ApnaBank/ApnaBank.sln /p:Configuration=Release
+          "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe" ApnaBank/ApnaBank.sln /p:Configuration=Release
 
       - name: ✅ Done
         run: echo "CI workflow completed successfully."
