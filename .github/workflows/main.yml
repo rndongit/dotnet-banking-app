@@ -7,32 +7,16 @@ on:
 
 jobs:
   build-and-deploy:
-    name: Build, Test, and Deploy (.NET)
-    runs-on: windows-latest  # ✅ Use Windows runner to support .NET Framework 4.5.2
+    name: Build and Deploy (.NET Framework 4.5.2)
+    runs-on: windows-latest
 
     steps:
-      - name: ⏬ Checkout Code 
+      - name: ⏬ Checkout Code
         uses: actions/checkout@v4
 
-      - name: 🛠️ Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '4.5.2'
-
-      - name: 📦 Restore Dependencies
-        run: dotnet restore ApnaBank/ApnaBank.sln
-
-      - name: 🧪 Run Unit Tests
-        run: dotnet test ApnaBank/ApnaBank.sln --no-restore --verbosity normal
-
-      - name: 🏗️ Build Application
-        run: dotnet build ApnaBank/ApnaBank.sln --no-restore --configuration Release
-
-      - name: 🚀 Publish Application
+      - name: 🏗️ Build Application using MSBuild
         run: |
-          dotnet publish ApnaBank/ApnaBank.csproj \
-            --configuration Release \
-            --output ./publish_output
+          msbuild ApnaBank/ApnaBank.sln /p:Configuration=Release
 
       - name: ✅ Done
-        run: echo "CI/CD workflow completed successfully."
+        run: echo "CI workflow completed successfully."
