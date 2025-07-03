@@ -1,0 +1,38 @@
+name: Manual CI/CD for .NET App
+
+on:
+  workflow_dispatch:
+    branches:
+      - master  # ✅ Only allow running from master branch
+
+jobs:
+  build-and-deploy:
+    name: Build, Test, and Deploy (.NET)
+    runs-on: ubuntu-latest  # ✅ GitHub-hosted runner
+
+    steps:
+      - name: ⏬ Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🛠️ Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: 📦 Restore Dependencies
+        run: dotnet restore dotnet-banking-app.sln
+
+      - name: 🧪 Run Unit Tests
+        run: dotnet test dotnet-banking-app.sln --no-restore --verbosity normal
+
+      - name: 🏗️ Build Application
+        run: dotnet build dotnet-banking-app.sln --no-restore --configuration Release
+
+      - name: 🚀 Publish Application
+        run: |
+          dotnet publish BankingApp/BankingApp.csproj \
+            --configuration Release \
+            --output ./publish_output
+
+      - name: ✅ Done
+        run: echo "CI/CD workflow completed successfully."
