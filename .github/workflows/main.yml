@@ -1,7 +1,9 @@
 name: Manual CI/CD for .NET App
 
 on:
-  workflow_dispatch:  # Manual trigger from GitHub UI
+  workflow_dispatch:
+    branches:
+      - master  # ✅ Only allow running from master branch
 
 jobs:
   build-and-deploy:
